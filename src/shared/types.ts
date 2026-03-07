@@ -1,0 +1,241 @@
+export const memoryKinds = [
+  "preference",
+  "environment_fact",
+  "app_alias",
+  "workflow_default",
+  "safe_macro"
+] as const;
+
+export type MemoryKind = (typeof memoryKinds)[number];
+
+export type PermissionStatus =
+  | "not-determined"
+  | "granted"
+  | "denied"
+  | "restricted"
+  | "unknown";
+
+export type ApprovalKind =
+  | "computer"
+  | "shell"
+  | "apply_patch"
+  | "function"
+  | "memory";
+
+export type TaskPhase =
+  | "idle"
+  | "connecting"
+  | "listening"
+  | "thinking"
+  | "speaking"
+  | "acting"
+  | "approvals"
+  | "error";
+
+export interface MemoryRecord {
+  id: string;
+  kind: MemoryKind;
+  subject: string;
+  content: string;
+  confidence: number;
+  source: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MemorySaveInput {
+  kind: MemoryKind;
+  subject: string;
+  content: string;
+  confidence: number;
+  source: string;
+  tags?: string[];
+}
+
+export interface MemorySearchInput {
+  query: string;
+  kinds?: MemoryKind[];
+  limit?: number;
+}
+
+export interface MemoryForgetInput {
+  id?: string;
+  query?: string;
+}
+
+export type MemoryDecision = "allow" | "approval_required" | "block";
+
+export interface MemoryPolicyResult {
+  decision: MemoryDecision;
+  reason: string;
+  normalizedTags: string[];
+}
+
+export interface TranscriptEntry {
+  id: string;
+  role: "user" | "assistant" | "system";
+  text: string;
+  timestamp: string;
+  agent?: string;
+}
+
+export interface BackendTaskInput {
+  requestId: string;
+  userRequest: string;
+  transcriptHistory: TranscriptEntry[];
+  activeAppHint?: string;
+  memoryContext?: string;
+}
+
+export interface BackendTaskResult {
+  taskId: string;
+  summary: string;
+  outputText: string;
+  agent: string;
+  completedAt: string;
+}
+
+export interface ApprovalRequest {
+  id: string;
+  taskId: string;
+  kind: ApprovalKind;
+  toolName: string;
+  summary: string;
+  detail?: string;
+  rawItem: unknown;
+  createdAt: string;
+}
+
+export type BackendTaskEvent =
+  | {
+      taskId: string;
+      type: "started";
+      createdAt: string;
+      summary: string;
+    }
+  | {
+      taskId: string;
+      type: "delegated";
+      createdAt: string;
+      summary: string;
+      detail?: string;
+    }
+  | {
+      taskId: string;
+      type: "approval_requested";
+      createdAt: string;
+      approval: ApprovalRequest;
+    }
+  | {
+      taskId: string;
+      type: "approved" | "rejected";
+      createdAt: string;
+      approvalId: string;
+      summary: string;
+    }
+  | {
+      taskId: string;
+      type: "tool_started" | "tool_finished";
+      createdAt: string;
+      summary: string;
+      detail?: string;
+      payload?: unknown;
+    }
+  | {
+      taskId: string;
+      type: "screenshot";
+      createdAt: string;
+      imageBase64: string;
+    }
+  | {
+      taskId: string;
+      type: "completed";
+      createdAt: string;
+      result: BackendTaskResult;
+    }
+  | {
+      taskId: string;
+      type: "failed";
+      createdAt: string;
+      summary: string;
+    }
+  | {
+      taskId: string;
+      type: "cancelled";
+      createdAt: string;
+      summary: string;
+    };
+
+export interface MCPServerConfig {
+  id: string;
+  label: string;
+  fullCommand: string;
+  cwd?: string;
+  enabled: boolean;
+}
+
+export interface ToolRegistryConfig {
+  enableWebSearch: boolean;
+  enableCodeInterpreter: boolean;
+  enableImageGeneration: boolean;
+  vectorStoreIds: string[];
+  mcpServers: MCPServerConfig[];
+}
+
+export interface SettingsData {
+  apiKey: string;
+  hotkey: string;
+  voice: string;
+  debugMode: boolean;
+  toolRegistry: ToolRegistryConfig;
+}
+
+export interface PermissionSnapshot {
+  microphone: PermissionStatus;
+  screen: PermissionStatus;
+  accessibilityTrusted: boolean;
+  inputServerAvailable: boolean;
+  inputServerVersion?: string;
+}
+
+export interface MemoryAuditRecord {
+  id: string;
+  memoryId: string;
+  action: "save" | "delete";
+  reason: string;
+  createdAt: string;
+  snapshot?: string;
+}
+
+export interface SettingsUpdate {
+  apiKey?: string;
+  hotkey?: string;
+  voice?: string;
+  debugMode?: boolean;
+  toolRegistry?: Partial<ToolRegistryConfig>;
+}
+
+export interface BackendApprovalDecision {
+  taskId: string;
+  approvalId: string;
+  approve: boolean;
+  alwaysApply?: boolean;
+  message?: string;
+}
+
+export interface RealtimeSnapshot {
+  connected: boolean;
+  muted: boolean;
+  currentAgent: string;
+  phase: TaskPhase;
+}
+
+export interface OverlayCommand {
+  type: "show" | "hide" | "hotkey" | "open-onboarding";
+}
+
+export interface RealtimeClientSecret {
+  value: string;
+  expiresAt?: number;
+}

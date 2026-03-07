@@ -63,6 +63,10 @@ chmod +x "$MACOS_DIR/$PRODUCT_NAME"
 cp -R "$SIDECAR_DIST_DIR" "$RUNTIME_DIR/"
 cp -R "$VOICE_DIST_DIR" "$RUNTIME_DIR/"
 cp "$STATUS_BAR_ICON_SOURCE" "$RESOURCES_DIR/$STATUS_BAR_ICON_NAME"
+LOGO_SOURCE="$ROOT_DIR/Sources/JarveyNative/Resources/JarveyLogoTransparent.png"
+if [[ -f "$LOGO_SOURCE" ]]; then
+  cp "$LOGO_SOURCE" "$RESOURCES_DIR/JarveyLogoTransparent.png"
+fi
 zsh "$ROOT_DIR/scripts/generate-app-icon.sh" "$APP_ICON_SOURCE" "$RESOURCES_DIR/$APP_ICON_NAME"
 zsh "$ROOT_DIR/scripts/embed-node-runtime.sh" "$HOST_NODE_BIN" "$MACOS_DIR/JarveyNode" "$FRAMEWORKS_DIR"
 

@@ -11,8 +11,8 @@ struct InputActionExecutor {
     static let characterDelay: useconds_t = 8_000
     static let dragStepDelay: useconds_t = 10_000
     static let dragStartDelay: useconds_t = 50_000
-    static let focusSettleDelay: useconds_t = 120_000
-    static let keyboardSettleDelay: useconds_t = 80_000
+    static let focusSettleDelay: useconds_t = 150_000
+    static let keyboardSettleDelay: useconds_t = 120_000
     static let pointerSettleDelay: useconds_t = 60_000
   }
 
@@ -131,12 +131,16 @@ struct InputActionExecutor {
   }
 
   private func postType(text: String) {
+    // Clear any lingering modifier flags so characters aren't misread as shortcuts.
+    let emptyFlags: CGEventFlags = []
     for char in text {
       let uniChar = Array(String(char).utf16)
       let down = CGEvent(keyboardEventSource: nil, virtualKey: 0, keyDown: true)
       let up = CGEvent(keyboardEventSource: nil, virtualKey: 0, keyDown: false)
       down?.keyboardSetUnicodeString(stringLength: uniChar.count, unicodeString: uniChar)
       up?.keyboardSetUnicodeString(stringLength: uniChar.count, unicodeString: uniChar)
+      down?.flags = emptyFlags
+      up?.flags = emptyFlags
       down?.post(tap: .cghidEventTap)
       usleep(Timing.characterDelay)
       up?.post(tap: .cghidEventTap)

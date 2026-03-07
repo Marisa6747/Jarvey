@@ -536,7 +536,7 @@ private struct WelcomeLogoAnimation: View {
 
   private var logoImage: some View {
     Group {
-      if let url = Bundle.module.url(forResource: "JarveyLogoTransparent", withExtension: "png"),
+      if let url = AppIdentity.resourceBundle.url(forResource: "JarveyLogoTransparent", withExtension: "png"),
          let nsImage = NSImage(contentsOf: url) {
         Image(nsImage: nsImage)
           .resizable()

@@ -24,7 +24,10 @@ final class ScreenCaptureController {
   func captureBase64PNG() async throws -> String {
     let image = try await captureMainDisplayImage()
     let bitmap = NSBitmapImageRep(cgImage: image)
-    guard let data = bitmap.representation(using: .png, properties: [:]) else {
+    guard let data = bitmap.representation(
+      using: .jpeg,
+      properties: [.compressionFactor: 0.75]
+    ) else {
       throw ScreenCaptureError.encodeFailed
     }
     return data.base64EncodedString()
@@ -38,6 +41,8 @@ final class ScreenCaptureController {
       throw ScreenCaptureError.captureUnavailable
     }
 
+    // SCDisplay.width/height are already in logical points (not retina pixels),
+    // so capture at that size to match the coordinate space the model uses.
     let filter = SCContentFilter(display: display, excludingWindows: [])
     let configuration = SCStreamConfiguration()
     configuration.width = max(display.width, 1)

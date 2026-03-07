@@ -14,6 +14,16 @@ enum AppIdentity {
     return baseDirectory.appending(path: appName, directoryHint: .isDirectory)
   }
 
+  static let resourceBundle: Bundle = {
+    // Prefer SPM's generated resource bundle when available (swift build / debug),
+    // fall back to the main app bundle (packaged .app).
+    if let spmBundle = Bundle(url: Bundle.main.bundleURL
+          .appending(path: "JarveyNative_JarveyNative.bundle")) {
+      return spmBundle
+    }
+    return Bundle.main
+  }()
+
   static func logsDirectory(fileManager: FileManager = .default) -> URL {
     let logsDirectory = applicationSupportRoot(fileManager: fileManager)
       .appending(path: "logs", directoryHint: .isDirectory)

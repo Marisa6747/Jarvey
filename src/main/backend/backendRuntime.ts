@@ -60,6 +60,15 @@ export class BackendRuntime extends EventEmitter<{
   }
 
   async startTask(input: BackendTaskInput): Promise<BackendTaskResult> {
+    // Cancel any in-flight tasks so only one agent controls the screen at a time.
+    for (const [existingId, existing] of this.tasks) {
+      if (!existing.completed) {
+        existing.controller.abort();
+        this.approvalHub.rejectTask(existingId, "Superseded by new task");
+        blogLine("INFO", `Cancelled existing task ${existingId} (superseded)`);
+      }
+    }
+
     const taskId = input.requestId || nanoid();
     const controller = new AbortController();
     this.tasks.set(taskId, { id: taskId, controller, completed: false });

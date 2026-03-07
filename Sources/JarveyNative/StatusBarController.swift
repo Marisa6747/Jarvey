@@ -116,7 +116,7 @@ private struct StatusBarSettingsView: View {
           .fill(Color.white.opacity(0.06))
           .frame(width: 32, height: 32)
 
-        if let url = Bundle.module.url(forResource: "JarveyLogoTransparent", withExtension: "png"),
+        if let url = AppIdentity.resourceBundle.url(forResource: "JarveyLogoTransparent", withExtension: "png"),
            let nsImage = NSImage(contentsOf: url) {
           Image(nsImage: nsImage)
             .resizable()

